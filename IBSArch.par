@@ -1,0 +1,51 @@
+REM ***** Parameters for Data Partitioning *****
+REM If you plan to archive data, you must have installed Oracle Database 11g Release 2 Enterprise Edition with Partitioning option. 
+REM If you partitioned your database using the CRIB.bat file installed with IBS v6.2 MR14 SP3 and later, you do not need to use this parameter file.
+
+
+REM Replace "MYDB" with the TNS connection string to your IBS database.
+REM If using Oracle RAC, replace "MYDB" with an Oracle service name configured to use a single Oracle instance dedicated to archival data processing.
+define TNAME = MYDB
+
+REM Replace "bd_archive" with the BUSINESSDATA_ARCH schema user and password. 
+REM This user can access all data in the BUSINESSDATA schema (both current and archived).
+define BD_archive_user = bd_archive
+define BD_archive_pass = bd_archive
+
+
+REM Replace "businessdata" with the existing BUSINESSDATA user and password.
+define BD_owner_user = businessdata
+define BD_owner_pass = businessdata
+
+REM Replace "datarepository" with the DATAREPOSITORY schema name in your environment. The new Archival DSN(s) will be added to your DATAREPOSITORY schema.
+define DR_user = datarepository
+
+REM If "DATAUSR" is not the default tablespace name for the new BD_archive_user, replace it with the tablespace name used in your environment.
+define TBS_DATAUSR = DATAUSR
+
+
+REM ***** Define Periods for Online Data *****
+
+REM Replace "36" with the number of months that data in each Archive Category should be considered online data.
+REM Older data will be part of the online archive. 
+REM The number of months can differ by Archive Category.
+REM The list of partitioned tables per Archive Category can be found in the IBS Installation, Upgrade, and Routine Operations Guide (MR15 and later).
+define HISTORY_MONTHS = 36
+define FINANCE_MONTHS = 36
+define CONTACT_MONTHS = 36
+
+REM Replace "1" with a number from 1 to 12. This indicates the month that marks the start of your company's fiscal year.
+REM This ensures that a new fiscal year will always be a new partition.
+define FISCAL_YEAR_MONTH = 1
+
+REM Set to "Y" to create a scheduler job that partitions the tables. 
+define SCHEDULE_PARTITIONING = Y
+
+REM If you want to delay the partitioning, enter the date and time when you want it to start.
+REM See the example below.
+REM Don't change if you want the partitionig job to start immediately.
+define PARTITION_JOB_START_DATE = ''
+REM define PARTITION_JOB_START_DATE = 11-21-2012 23:30:00
+
+REM Make sure this Oracle datetime mask matches the format of the date and time you entered for the PARTITION_JOB_START_DATE above.
+define PARTITION_JOB_START_FORMAT = MM-DD-YYYY HH24:MI:SS 
